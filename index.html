@@ -4,6 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>melanin</title>
+
+  <!-- Favicon: просто замени файл media/brand/favicon.png -->
+  <link id="favicon" rel="icon" sizes="any" type="image/png" href="media/brand/favicon.png" />
+  <link rel="apple-touch-icon" href="media/brand/favicon.png" />
+
   <meta name="description" content="Минималистичное портфолио: видео и фото. Бесконечная лента, лайтбокс с кастомным плеером, фиксированный заголовок, панель контактов, переключатель эффектов (0.5 / 1 / 1.5)." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +27,7 @@
     .contact-bar a:hover .contact-icon{filter:brightness(1.5) contrast(1.15) drop-shadow(0 0 6px rgba(255,255,255,.35));transform:scale(1.08)}
     .contact-stack{display:inline-grid;grid-auto-rows:auto;justify-items:center;gap:6px}
 
-    .container{max-width:1380px;margin:0 auto;padding:10px 20px}
+    .container{max-width:1380px;margin:0 авто;padding:10px 20px}
     .header-row{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;min-height:64px}
     .headline{position:absolute;left:50%;transform:translateX(-50%);top:50%;translate:0 -50%;text-align:center;white-space:nowrap;z-index:2;pointer-events:auto}
     .headline .script-img{display:inline-block;vertical-align:middle;height:clamp(28px,6.5vw,64px);width:auto;object-fit:contain;margin:0 .12em;filter:drop-shadow(0 1px 0 rgba(0,0,0,.35));cursor:pointer}
@@ -81,7 +86,7 @@
     .range::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
     .volume{width:120px}
 
-    .caption{margin-top:10px;color:#eaeaea;text-align:center;font-size:14px;letter-spacing:.03em;background:rgba(30,30,30,.85);border:1px solid var(--border);padding:8px 12px;border-radius:8px;max-width:min(92vw,1200px)}
+    .caption{margin-top:10px;color:#eaeaea;text-align:center;font-size:14px;letter-spacing:.03ем;background:rgba(30,30,30,.85);border:1px solid var(--border);padding:8px 12px;border-radius:8px;max-width:min(92vw,1200px)}
     .caption .cap-main{font-weight:700}
     .caption .cap-count{opacity:.75;margin-left:6px}
 
@@ -424,7 +429,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   appendBatch();appendBatch();
   ob.observe(sentinel);
 
-  window.addEventListener('scroll',()=> {
+  window.addEventListener('scroll',()=>{
     const st=window.scrollY||document.documentElement.scrollTop;
     const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
     const p=Math.max(0,Math.min(1,h?st/h:0));
