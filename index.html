@@ -116,14 +116,17 @@
     body.mode-15{ --on-media:#0a0a0a; --on-media-sub:#5c5f66 }
 
     /* ===== КРУЖКИ ДЛЯ ПАПКИ media/circles ===== */
-    .card.circle .thumb{overflow:visible}            /* управляем обводкой/тенью при желании */
+    .card.circle{ background:var(--bg); border-color:var(--bg); box-shadow:none; } /* чисто чёрный фон и без рамки */
+    .card.circle .thumb{ overflow:visible; background:var(--bg); }
     .circle-box{
       position:relative;
       width:100%;
       height:100%;
+      aspect-ratio:1/1;          /* страховка: идеальный квадрат даже до JS */
       border-radius:9999px;
-      overflow:hidden;                               /* идеальная круглая маска (мобилки ок) */
-      box-shadow:0 0 0 0 transparent;               /* подложку убрал */
+      overflow:hidden;           /* идеальная круглая маска (мобилки ок) */
+      box-shadow:0 0 0 0 transparent; /* никакой подложки */
+      background:var(--bg);
     }
     .circle-box > .media,
     .circle-box > .reveal{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0}
@@ -131,6 +134,7 @@
     /* никакой затемняющей маски и «подложки» у кружков */
     .card.circle .mask{display:none}
     .card.circle .text{left:0;right:0;padding:0 12px}
+
     /* убрать синие хайлайты в лайтбоксе */
     .lightbox img, .lightbox video, .dialog, .frame, .lb-nav .nav-btn { -webkit-tap-highlight-color:transparent }
     .lightbox img, .lightbox video { outline:none; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; user-drag:none }
@@ -163,7 +167,7 @@
             <button class="mode-btn" role="tab" data-mode="15" aria-checked="true">1.5</button>
           </div>
         </div>
-          <div class="headline"><img class="script-img" src="media/brand/123.png" alt="melanin" data-overlay="🤍🤍🤍🤍🤍"/></div>
+        <div class="headline"><img class="script-img" src="media/brand/123.png" alt="melanin" data-overlay="🤍🤍🤍🤍🤍"/></div>
         <div></div>
       </div>
     </div>
@@ -215,15 +219,13 @@
 /* ===== Контент ===== */
 const BASE = [
   { id:'v-01', type:'video', src:'media/circles/123.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
-  { id:'v-01', type:'video', src:'media/circles/234.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
-  { id:'v-01', type:'video', src:'media/circles/345.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
-  { id:'v-01', type:'video', src:'media/circles/456.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
-  { id:'v-01', type:'video', src:'media/circles/456.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
-  { id:'v-01', type:'video', src:'media/loops/IMG_3586.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
-  
+  { id:'v-02', type:'video', src:'media/circles/234.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-03', type:'video', src:'media/circles/345.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-04', type:'video', src:'media/circles/456.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-05', type:'video', src:'media/circles/456.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-06', type:'video', src:'media/loops/IMG_3586.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
 
   /* Сюда добавляй свои кружки: media/circles/... */
-  // пример:
   // { id:'tg-001', type:'video', src:'media/circles/my_square.mp4', poster:'posters/my_square.jpg', artist:'', track:'' },
 
   { id:'img-01', type:'image', src:'media/вика на крыше красиво)/img_01.jpg', artist:'вика', track:'крыша'},
@@ -300,12 +302,12 @@ function makeCard(item){
 
   const thumb=document.createElement('div'); thumb.className='thumb';
 
-  let host = thumb; // куда кладём media
+  let host = thumb;
   if(isCircle){
     const circleBox=document.createElement('div');
     circleBox.className='circle-box';
     thumb.appendChild(circleBox);
-    host = circleBox; // всё медиа внутрь круга
+    host = circleBox;
   }
 
   let mediaEl, revealEl;
@@ -357,7 +359,6 @@ function makeCard(item){
   thumb.append(text);
   card.append(thumb);
 
-  // reveal circle cursor (работает и в круге)
   function updateReveal(e){
     if(!document.body.classList.contains('mode-05')) return;
     const base = isCircle ? host : thumb;
@@ -405,7 +406,6 @@ function layoutCard(card, thumb, w, h, isCircle=false){
   const gap=parseFloat(getComputedStyle(gridEl).gap)||0;
   const r = w/Math.max(1,h);
 
-  // ширина карточки в сетке
   let colSpan=1; if(!isCircle && r>1.6 && columns>=3) colSpan=2;
   card.style.gridColumn=`span ${colSpan}`;
 
@@ -413,7 +413,6 @@ function layoutCard(card, thumb, w, h, isCircle=false){
   const colWidth=(gridWidth-gap*(columns-1))/columns;
   const widthPx=colWidth*colSpan + (gap*(colSpan-1));
 
-  // если круг — высота = ширина (идеальный квадрат для маски)
   const targetHeight = isCircle ? widthPx : Math.max(200, Math.min(520, widthPx/r));
   thumb.style.height=targetHeight+'px';
 
