@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>melanin</title>
 
-  <!-- Favicon: просто замени файл media/brand/favicon.png -->
   <link id="favicon" rel="icon" sizes="any" type="image/png" href="media/brand/favicon.png" />
   <link rel="apple-touch-icon" href="media/brand/favicon.png" />
 
@@ -14,7 +13,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{ --bg:#000; --fg:#eaeaea; --muted:#86868B; --border:#141414; --card:#0e0e0e; --radius:12px; --ease:cubic-bezier(.2,.8,.2,1); --accent:#ffffff; --gap:16px; --row:8px; --reveal-r:110 }
+    :root{
+      --bg:#000; --fg:#eaeaea; --muted:#86868B; --border:#141414; --card:#0e0e0e;
+      --radius:12px; --ease:cubic-bezier(.2,.8,.2,1); --accent:#ffffff;
+      --gap:16px; --row:8px; --reveal-r:110;
+      --on-media:#ffffff; --on-media-sub:#b2b2b6;
+    }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -23,21 +27,21 @@
     .contact-bar{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:10px;padding:6px 16px;border-bottom:1px solid var(--border)}
     .contact-bar a{display:inline-block}
     .contact-left{justify-self:start}.contact-center{justify-self:center}.contact-right{justify-self:end}
-    .contact-icon{width:22px;height:22px;display:block;image-rendering:auto;filter:brightness(1.25) contrast(1.1) drop-shadow(0 0 3px rgba(255,255,255,.18));transition:filter .25s var(--ease),transform .25s var(--ease)}
+    .contact-icon{width:22px;height:22px;display:block;filter:brightness(1.25) contrast(1.1) drop-shadow(0 0 3px rgba(255,255,255,.18));transition:filter .25s var(--ease),transform .25s var(--ease)}
     .contact-bar a:hover .contact-icon{filter:brightness(1.5) contrast(1.15) drop-shadow(0 0 6px rgba(255,255,255,.35));transform:scale(1.08)}
     .contact-stack{display:inline-grid;grid-auto-rows:auto;justify-items:center;gap:6px}
 
-    .container{max-width:1380px;margin:0 авто;padding:10px 20px}
+    .container{max-width:1380px;margin:0 auto;padding:10px 20px}
     .header-row{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;min-height:64px}
     .headline{position:absolute;left:50%;transform:translateX(-50%);top:50%;translate:0 -50%;text-align:center;white-space:nowrap;z-index:2;pointer-events:auto}
-    .headline .script-img{display:inline-block;vertical-align:middle;height:clamp(28px,6.5vw,64px);width:auto;object-fit:contain;margin:0 .12em;filter:drop-shadow(0 1px 0 rgba(0,0,0,.35));cursor:pointer}
+    .headline .script-img{display:inline-block;vertical-align:middle;height:clamp(28px,6.5vw,64px);object-fit:contain;margin:0 .12em;filter:drop-shadow(0 1px 0 rgba(0,0,0,.35));cursor:pointer}
 
     .headline-overlay{position:fixed;left:50%;top:18%;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,.45);padding:10px 14px;border-radius:10px;color:#fff;letter-spacing:.06em;font-weight:700;font-size:clamp(14px,2.8vw,18px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease);z-index:1200;max-width:min(86vw,840px);text-align:center}
     .headline-overlay.show{opacity:1}
 
     .spacer{height:98px}
     .mode-switch{display:inline-grid;grid-auto-flow:column;gap:2px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:2px}
-    .mode-btn{appearance:none;border:0;background:transparent;color:#cfcfcf;font-size:12px;letter-spacing:.08em;padding:6px 10px;border-radius:999px;cursor:pointer}
+    .mode-btn{appearance:none;border:0;background:transparent;color:#cfcfcf;font-size:12px;letter-spacing:.08ем;padding:6px 10px;border-radius:999px;cursor:pointer}
     .mode-btn[aria-checked="true"],.mode-btn.active{background:rgba(255,255,255,.18);color:#fff}
 
     main{padding:0 16px 80px}
@@ -46,28 +50,38 @@
     .thumb{position:relative;width:100%;overflow:hidden;touch-action:manipulation}
     .thumb>.media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px;transition:filter .5s var(--ease),transform .5s var(--ease)}
 
-    body.mode-1 .media{filter:none;image-rendering:auto;transform:none}
-    body.mode-05 .media{image-rendering:auto;filter:blur(3px) contrast(1.05) brightness(1.02) saturate(.92);transform:scale(.992)}
-    .reveal{position:absolute;inset:0;object-fit:cover;pointer-events:none;filter:none!important;transform:none!important;--cx:50%;--cy:50%;--rpx:calc(var(--reveal-r)*1px);-webkit-mask-image:radial-gradient(circle var(--rpx) at var(--cx) var(--cy), #000 98%, transparent 100%);mask-image:radial-gradient(circle var(--rpx) at var(--cx) var(--cy), #000 98%, transparent 100%);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;transition:-webkit-mask-size .15s var(--ease),mask-size .15s var(--ease)}
+    /* Режимы эффектов */
+    body.mode-1 .media{filter:none;transform:none}
+    body.mode-05 .media{filter:blur(3px) contrast(1.05) brightness(1.02) saturate(.92);transform:scale(.992)}
+    .reveal{
+      position:absolute;inset:0;object-fit:cover;pointer-events:none;
+      --cx:50%;--cy:50%;--rpx:calc(var(--reveal-r)*1px);
+      -webkit-mask-image:radial-gradient(circle var(--rpx) at var(--cx) var(--cy), #000 98%, transparent 100%);
+      mask-image:radial-gradient(circle var(--rpx) at var(--cx) var(--cy), #000 98%, transparent 100%);
+      -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+      transition:-webkit-mask-size .15s var(--ease),mask-size .15s var(--ease);
+      filter:none !important;
+    }
     body:not(.mode-05) .reveal{display:none}
+
     body.mode-15 .media{filter:invert(1) grayscale(1) brightness(1.18) contrast(1.05);transform:scale(.988)}
     body.mode-15 .card:hover .media{filter:none}
 
-    .mask{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.45),rgba(0,0,0,.12));opacity:0;transition:opacity .35s var(--ease)}
+    .mask{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.45),rgba(0,0,0,.12));opacity:0;transition:opacity .35s var(--ease);pointer-events:none}
     .card:hover .mask{opacity:1}
     .text{position:absolute;left:12px;right:12px;bottom:10px;display:flex;flex-direction:column;gap:4px;pointer-events:none}
-    .artist{font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;font-size:14px}
-    .track{color:#b2b2b6;font-size:13px}
+    .artist{font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--on-media);font-size:14px}
+    .track{color:var(--on-media-sub);font-size:13px}
 
     .card[data-enter]{opacity:0;transform:translateY(12px) scale(.98) rotate(var(--r,0deg))}
     .card.in{opacity:1;transform:translateY(0) scale(1) rotate(0);transition:opacity .55s var(--ease),transform .55s var(--ease)}
 
-    /* Лайтбокс */
     .lightbox{position:fixed;inset:0;z-index:600;display:none}
     .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);opacity:0;transition:opacity .25s var(--ease)}
     .dialog{position:absolute;inset:0;display:grid;place-items:center;padding:24px}
-    .frame{width:min(92vw,1200px);aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 10px 50px rgba(0,0,0,.6);transform:scale(.98);opacity:0;transition:transform .3s var(--ease),opacity .3s var(--ease);position:relative}
-    .frame>video,.frame>img{width:100%;height:100%;object-fit:contain}
+
+    .frame{display:flex;align-items:center;justify-content:center;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 10px 50px rgba(0,0,0,.6);transform:scale(.98);opacity:0;transition:transform .3s var(--ease),opacity .3s var(--ease);position:relative;max-width:min(96vw,1400px);max-height:calc(100vh - 160px)}
+    .frame>video,.frame>img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 
     .lb-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;pointer-events:none;z-index:50}
     .nav-btn{pointer-events:auto;height:44px;width:44px;margin:0 8px;display:grid;place-items:center;background:rgba(30,30,30,.7);border:1px solid var(--border);border-radius:10px;cursor:pointer;user-select:none}
@@ -86,7 +100,7 @@
     .range::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer}
     .volume{width:120px}
 
-    .caption{margin-top:10px;color:#eaeaea;text-align:center;font-size:14px;letter-spacing:.03ем;background:rgba(30,30,30,.85);border:1px solid var(--border);padding:8px 12px;border-radius:8px;max-width:min(92vw,1200px)}
+    .caption{margin-top:10px;color:#eaeaea;text-align:center;font-size:14px;letter-spacing:.03em;background:rgba(30,30,30,.85);border:1px solid var(--border);padding:8px 12px;border-radius:8px;max-width:min(92vw,1200px)}
     .caption .cap-main{font-weight:700}
     .caption .cap-count{opacity:.75;margin-left:6px}
 
@@ -98,6 +112,30 @@
 
     @media (max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}
     @media (max-width:640px){.grid{grid-template-columns:1fr}}
+
+    body.mode-15{ --on-media:#0a0a0a; --on-media-sub:#5c5f66 }
+
+    /* ===== КРУЖКИ ДЛЯ ПАПКИ media/circles ===== */
+    .card.circle .thumb{overflow:visible}            /* управляем обводкой/тенью при желании */
+    .circle-box{
+      position:relative;
+      width:100%;
+      height:100%;
+      border-radius:9999px;
+      overflow:hidden;                               /* идеальная круглая маска (мобилки ок) */
+      box-shadow:0 0 0 0 transparent;               /* подложку убрал */
+    }
+    .circle-box > .media,
+    .circle-box > .reveal{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0}
+
+    /* никакой затемняющей маски и «подложки» у кружков */
+    .card.circle .mask{display:none}
+    .card.circle .text{left:0;right:0;padding:0 12px}
+    /* убрать синие хайлайты в лайтбоксе */
+    .lightbox img, .lightbox video, .dialog, .frame, .lb-nav .nav-btn { -webkit-tap-highlight-color:transparent }
+    .lightbox img, .lightbox video { outline:none; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; user-drag:none }
+    .lb-nav .nav-btn:focus, .lb-nav .nav-btn:focus-visible { outline:none }
+    .dialog, .frame { -webkit-user-select:none; user-select:none }
   </style>
 </head>
 <body class="mode-15">
@@ -125,7 +163,7 @@
             <button class="mode-btn" role="tab" data-mode="15" aria-checked="true">1.5</button>
           </div>
         </div>
-        <div class="headline"><img class="script-img" src="media/brand/123.png" alt="melanin" data-overlay="Я люблю тебя"/></div>
+          <div class="headline"><img class="script-img" src="media/brand/123.png" alt="melanin" data-overlay="🤍🤍🤍🤍🤍"/></div>
         <div></div>
       </div>
     </div>
@@ -165,7 +203,7 @@
         </div>
       </div>
       <div class="caption" id="caption" aria-live="polite"></div>
-      <button class="close" id="btnClose" aria-label="Закрыть"><img src="media/ui/close.svg" alt=""></button>
+      <button class="close" id="btnClose" aria-label="Закрыть"><img src="media/ui/20251020_2015_Красивые Люди_remix_01k816cnc8eq7ap8w3gwmt2cme.png" alt=""></button>
     </div>
   </div>
 
@@ -176,14 +214,23 @@
 
 /* ===== Контент ===== */
 const BASE = [
-  { id:'v-01', type:'video', src:'media/loops/IMG_3586.mov', poster:'posters/IMG_3586.jpg', artist:'ПРОДЛЕНКА', track:'ЯХЗ' },
-  { id:'v-02', type:'video', src:'media/loops/neon_loop_02.mp4', poster:'posters/neon_loop_02.jpg', artist:'MADK1D', track:'Neon Loop' },
+  { id:'v-01', type:'video', src:'media/circles/123.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-01', type:'video', src:'media/circles/234.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-01', type:'video', src:'media/circles/345.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-01', type:'video', src:'media/circles/456.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-01', type:'video', src:'media/circles/456.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  { id:'v-01', type:'video', src:'media/loops/IMG_3586.mp4', poster:'posters/IMG_3586.jpg', artist:'111', track:'ЯХЗ' },
+  
+
+  /* Сюда добавляй свои кружки: media/circles/... */
+  // пример:
+  // { id:'tg-001', type:'video', src:'media/circles/my_square.mp4', poster:'posters/my_square.jpg', artist:'', track:'' },
+
   { id:'img-01', type:'image', src:'media/вика на крыше красиво)/img_01.jpg', artist:'вика', track:'крыша'},
   { id:'img-02', type:'image', src:'media/вика на крыше красиво)/img_02.jpg', artist:'вика', track:'крыша'},
   { id:'img-03', type:'image', src:'media/вика на крыше красиво)/img_03.jpg', artist:'вика', track:'крыша'},
   { id:'img-04', type:'image', src:'media/вика на крыше красиво)/img_04.jpg', artist:'вика', track:'крыша'},
   { id:'img-05', type:'image', src:'media/вика на крыше красиво)/img_05.jpg', artist:'вика', track:'крыша'},
-  { id:'img-06', type:'image', src:'media/вика на крыше красиво)/img_06.jpg', artist:'вика', track:'крыша'},
   { id:'img-01b', type:'image', src:'media/заброшка)/img_01.jpg', artist:'ACIDORA', track:'Poster A'},
   { id:'img-02b', type:'image', src:'media/заброшка)/img_02.jpg', artist:'HWVR', track:'Still 01'},
   { id:'img-03b', type:'image', src:'media/заброшка)/img_03.jpg', artist:'MISC', track:'Concept 01'},
@@ -215,82 +262,185 @@ let cursor=0,uid=0; const PAGE=12; const displayed=[]; let currentIndex=-1; let 
 
 /* Группировка по папке для изображений */
 let currentGroup=[]; let groupPos=0;
-
-/* Глобальная ссылка на переключатель режима (фикс прежнего краша) */
 let modeSwitchEl=null;
+/* IntersectionObserver */
+let ob=null;
+/* Отдельный observer для превью-видео */
+let videoObserver=null;
+
+/* Скролл-лок без «залипания» */
+let __scrollY = 0;
+function lockScroll(){ __scrollY = window.scrollY||document.documentElement.scrollTop||0; document.body.style.position='fixed'; document.body.style.top=`-${__scrollY}px`; document.body.style.width='100%'; }
+function unlockScroll(){ document.body.style.position=''; document.body.style.top=''; document.body.style.width=''; window.scrollTo(0,__scrollY); }
 
 const pathDir = (p)=> (p||'').replace(/[#?].*$/,'').split('/').slice(0,-1).join('/') + '/';
-const shuffle = (a)=>{const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r};
+const inCircles = (p)=> /\/circles\//.test(p||'');
+const shuffle = (a)=>{const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[r[i],r[j]]=[r[j],r[i]]}return r};
 const nextBatch=(n=PAGE)=>{const b=[];for(let i=0;i<n;i++){const base=BASE[cursor%BASE.length];cursor++;b.push({...base,id:base.id+'-'+(uid++)})}return shuffle(b)};
 
-/* Карточка: рендерим IMG (для видео — постер) */
+/* === Утилиты === */
+const uniqueBy = (arr, keyFn)=> { const map=new Map(); for(const it of arr){ const k=keyFn(it); if(!map.has(k)) map.set(k,it);} return [...map.values()] };
+function fitFrameToMedia(nw, nh){ if(!nw||!nh) return; const maxW=Math.min(window.innerWidth*0.96,1400); const maxH=Math.max(320, window.innerHeight-160); const k=Math.min(maxW/nw, maxH/nh, 1); frame.style.width=Math.round(nw*k)+'px'; frame.style.height=Math.round(nh*k)+'px'; }
+function fitCurrent(){ if(!currentMedia) return; if(currentMedia instanceof HTMLVideoElement){ fitFrameToMedia(currentMedia.videoWidth||16, currentMedia.videoHeight||9); } else if(currentMedia instanceof HTMLImageElement){ fitFrameToMedia(currentMedia.naturalWidth||16, currentMedia.naturalHeight||9); } }
+
+const fmt=(s)=>{ if(!isFinite(s))return'0:00'; const m=Math.floor(s/60); const ss=String(Math.floor(s%60)).padStart(2,'0'); return `${m}:${ss}`; };
+const fileExt=(p)=> (p||'').split('.').pop()?.toLowerCase()||'';
+const mimeByExt=(p)=>{ const e=fileExt(p); if(e==='mp4'||e==='m4v') return 'video/mp4'; if(e==='webm') return 'video/webm'; if(e==='mov'||e==='qt') return 'video/quicktime'; return ''; };
+
+/* ===== КАРТОЧКА ===== */
 function makeCard(item){
-  const card=document.createElement('article');card.className='card';card.dataset.id=item.id;card.setAttribute('data-enter','');card.style.setProperty('--r',(Math.random()*1.2-0.6).toFixed(2)+'deg');
-  const thumb=document.createElement('div');thumb.className='thumb';
-  const img=document.createElement('img');
-  img.className='media'; img.loading='lazy';
-  img.alt=`${item.artist||''} ${item.track||''}`.trim();
-  img.src = (item.type==='video' && item.poster) ? item.poster : item.src;
+  const card=document.createElement('article');
+  const isCircle = item.type==='video' && inCircles(item.src);
+  card.className='card' + (isCircle ? ' circle' : '');
+  card.dataset.id=item.id;
+  card.setAttribute('data-enter','');
+  card.style.setProperty('--r',(Math.random()*1.2-0.6).toFixed(2)+'deg');
+  card.tabIndex=0; card.setAttribute('role','button');
+  card.setAttribute('aria-label', `${item.artist||''} ${item.track||''}`.trim() || 'Открыть');
 
-  img.addEventListener('load', ()=>{ const w=img.naturalWidth||16, h=img.naturalHeight||9; layoutCard(card, thumb, w, h); });
-  img.addEventListener('error', ()=>{ thumb.style.height='280px'; thumb.style.background='#111'; thumb.style.display='grid'; thumb.style.placeItems='center'; thumb.innerHTML='<div style="color:#bbb;font-size:14px;letter-spacing:.06em">превью недоступно</div>'; });
+  const thumb=document.createElement('div'); thumb.className='thumb';
 
-  const reveal=img.cloneNode(true); reveal.classList.add('reveal');
-  const mask=document.createElement('div');mask.className='mask';
-  const text=document.createElement('div');text.className='text';
-  const artist=document.createElement('div');artist.className='artist';artist.textContent=item.artist||'';
-  const track=document.createElement('div');track.className='track';track.textContent=item.track||'';
+  let host = thumb; // куда кладём media
+  if(isCircle){
+    const circleBox=document.createElement('div');
+    circleBox.className='circle-box';
+    thumb.appendChild(circleBox);
+    host = circleBox; // всё медиа внутрь круга
+  }
+
+  let mediaEl, revealEl;
+  if(item.type==='video'){
+    const v=document.createElement('video');
+    v.className='media';
+    v.playsInline = true; v.setAttribute('playsinline','');
+    v.muted = true; v.setAttribute('muted','');
+    v.loop = true; v.setAttribute('loop','');
+    v.autoplay = true; v.setAttribute('autoplay','');
+    v.preload = 'metadata';
+    if(item.poster) v.poster=item.poster;
+    const src=document.createElement('source'); src.src=item.src; const mt=mimeByExt(item.src); if(mt) src.type=mt; v.appendChild(src);
+    mediaEl=v;
+
+    revealEl=v.cloneNode();
+    revealEl.className='reveal';
+    const src2=document.createElement('source'); src2.src=item.src; if(mt) src2.type=mt; revealEl.appendChild(src2);
+    revealEl.muted=true; revealEl.loop=true; revealEl.preload='none';
+  } else {
+    const img=document.createElement('img');
+    img.className='media'; img.loading='lazy';
+    img.alt=`${item.artist||''} ${item.track||''}`.trim();
+    img.src=item.src;
+    mediaEl=img;
+    revealEl=img.cloneNode(true); revealEl.className='reveal';
+  }
+
+  function onMediaReady(){
+    const w = mediaEl instanceof HTMLVideoElement ? (mediaEl.videoWidth||16) : (mediaEl.naturalWidth||16);
+    const h = mediaEl instanceof HTMLVideoElement ? (mediaEl.videoHeight||9) : (mediaEl.naturalHeight||9);
+    layoutCard(card, thumb, w, h, isCircle);
+  }
+  if(mediaEl instanceof HTMLVideoElement){
+    mediaEl.addEventListener('loadedmetadata', onMediaReady, {once:true});
+  } else {
+    mediaEl.addEventListener('load', onMediaReady, {once:true});
+    mediaEl.addEventListener('error', ()=>{ thumb.style.height='280px'; thumb.style.background='#111'; thumb.style.display='grid'; thumb.style.placeItems='center'; thumb.innerHTML='<div style="color:#bbb;font-size:14px;letter-spacing:.06em">превью недоступно</div>' });
+  }
+
+  const mask=document.createElement('div'); mask.className='mask';
+  const text=document.createElement('div'); text.className='text';
+  const artist=document.createElement('div'); artist.className='artist'; artist.textContent=item.artist||'';
+  const track=document.createElement('div'); track.className='track'; track.textContent=item.track||'';
   text.append(artist,track);
 
-  thumb.append(img,reveal,mask,text);
+  host.append(mediaEl, revealEl);
+  if(!isCircle) thumb.append(mask);
+  thumb.append(text);
   card.append(thumb);
 
-  thumb.addEventListener('mousemove', (e)=>{
+  // reveal circle cursor (работает и в круге)
+  function updateReveal(e){
     if(!document.body.classList.contains('mode-05')) return;
-    const r=thumb.getBoundingClientRect();
-    reveal.style.setProperty('--cx',(e.clientX-r.left)+'px');
-    reveal.style.setProperty('--cy',(e.clientY-r.top)+'px');
-    reveal.style.setProperty('--reveal-r', getRevealRadius());
+    const base = isCircle ? host : thumb;
+    const r=base.getBoundingClientRect();
+    revealEl.style.setProperty('--cx',(e.clientX-r.left)+'px');
+    revealEl.style.setProperty('--cy',(e.clientY-r.top)+'px');
+    revealEl.style.setProperty('--reveal-r', getRevealRadius());
+  }
+  thumb.addEventListener('pointermove', updateReveal);
+  thumb.addEventListener('pointerenter', (e)=>{
+    if(!document.body.classList.contains('mode-05')) return;
+    updateReveal(e);
+    if(mediaEl instanceof HTMLVideoElement && revealEl instanceof HTMLVideoElement){
+      try{ revealEl.currentTime = mediaEl.currentTime; revealEl.play().catch(()=>{}); }catch(_){ }
+    }
   });
-  ['mouseenter','mouseleave'].forEach(t=>{
-    thumb.addEventListener(t, ()=>{ if(!document.body.classList.contains('mode-05')) return; reveal.style.setProperty('--reveal-r', t==='mouseenter'?getRevealRadius():'0'); });
+  thumb.addEventListener('pointerleave', ()=>{
+    if(document.body.classList.contains('mode-05')) revealEl.style.setProperty('--reveal-r','0');
+    if(revealEl instanceof HTMLVideoElement){ revealEl.pause(); }
   });
 
-  thumb.addEventListener('pointerup', ()=> openById(item.id));
+  const open = ()=> openById(item.id);
+  thumb.addEventListener('click', open);
+  card.addEventListener('click', open);
+  card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open(); } });
+
+  if(mediaEl instanceof HTMLVideoElement){
+    mediaEl.addEventListener('error', ()=>{
+      if(item.poster){
+        const img=document.createElement('img');
+        img.className='media'; img.src=item.poster; img.alt='preview';
+        host.replaceChild(img, mediaEl);
+      }
+    }, {once:true});
+    attachVideoToObserver(mediaEl);
+  }
+
   return card;
 }
 
 /* Раскладка */
-function layoutCard(card, thumb, w, h){
+function layoutCard(card, thumb, w, h, isCircle=false){
   const gridEl=grid;
   const columns=getComputedStyle(gridEl).gridTemplateColumns.split(' ').length;
   const gap=parseFloat(getComputedStyle(gridEl).gap)||0;
-  const r=w/Math.max(1,h);
-  let colSpan=1; if(r>1.6 && columns>=3) colSpan=2;
+  const r = w/Math.max(1,h);
+
+  // ширина карточки в сетке
+  let colSpan=1; if(!isCircle && r>1.6 && columns>=3) colSpan=2;
   card.style.gridColumn=`span ${colSpan}`;
+
   const gridWidth=gridEl.clientWidth;
   const colWidth=(gridWidth-gap*(columns-1))/columns;
   const widthPx=colWidth*colSpan + (gap*(colSpan-1));
-  const targetHeight=Math.max(200, Math.min(520, widthPx/r));
+
+  // если круг — высота = ширина (идеальный квадрат для маски)
+  const targetHeight = isCircle ? widthPx : Math.max(200, Math.min(520, widthPx/r));
   thumb.style.height=targetHeight+'px';
+
   const rowH=parseFloat(getComputedStyle(gridEl).gridAutoRows);
   const rowGap=parseFloat(getComputedStyle(gridEl).gap)||0;
   const rowSpan=Math.ceil((targetHeight+rowGap)/(rowH+rowGap));
   card.style.gridRowEnd=`span ${rowSpan}`;
 }
+
 const getRevealRadius=()=> (window.innerWidth<640?88:(window.innerWidth<1024?100:112));
-function appendBatch(){ const items=nextBatch(); const frag=document.createDocumentFragment(); items.forEach(it=>{displayed.push(it); const el=makeCard(it); frag.appendChild(el); setTimeout(()=>el.classList.add('in'),80+Math.random()*340)}); grid.appendChild(frag); }
+function appendBatch(){ const items=nextBatch(); const frag=document.createDocumentFragment(); items.forEach(it=>{displayed.push(it); const el=makeCard(it); frag.appendChild(el); setTimeout(()=>el.classList.add('in'),80+Math.random()*340)}); grid.appendChild(frag) }
 
-/* Лайтбокс */
-const fmt=(s)=>{ if(!isFinite(s))return'0:00'; const m=Math.floor(s/60); const ss=String(Math.floor(s%60)).padStart(2,'0'); return `${m}:${ss}`; };
-const fileExt=(p)=> (p||'').split('.').pop()?.toLowerCase()||'';
-const mimeByExt=(p)=>{ const e=fileExt(p); if(e==='mp4'||e==='m4v') return 'video/mp4'; if(e==='webm') return 'video/webm'; if(e==='mov'||e==='qt') return 'video/quicktime'; return ''; };
-
+/* ===== ЛАЙТБОКС ===== */
 function openById(id){
   const idx=displayed.findIndex(x=>x.id===id); if(idx===-1) return;
   const item=displayed[idx]; currentIndex=idx;
-  if(item.type==='image'){ const dir=pathDir(item.src); currentGroup=displayed.filter(x=>x.type==='image' && pathDir(x.src)===dir); groupPos=currentGroup.findIndex(x=>x.id===item.id); }
-  else { currentGroup=[]; groupPos=0; }
+
+  if(item.type==='image'){
+    const dir = pathDir(item.src);
+    currentGroup = uniqueBy(
+      displayed.filter(x => x.type==='image' && pathDir(x.src)===dir),
+      x => x.src
+    ).sort((a,b)=> a.src.localeCompare(b.src, 'ru'));
+    groupPos = currentGroup.findIndex(x => x.src === item.src);
+  } else {
+    currentGroup=[]; groupPos=0;
+  }
   renderCurrent(item);
 }
 
@@ -298,23 +448,37 @@ function renderCurrent(item){
   frame.innerHTML=''; player.classList.remove('visible'); currentMedia=null;
 
   if(item.type==='image'){
-    const img=document.createElement('img'); img.src=item.src; img.alt=`${item.artist||''} ${item.track||''}`.trim();
+    const img=document.createElement('img');
+    img.src=item.src; img.alt=`${item.artist||''} ${item.track||''}`.trim();
+    img.decoding='async'; img.loading='eager';
+    img.draggable=false; img.tabIndex=-1;
+    img.style.webkitTapHighlightColor='transparent';
+    img.addEventListener('load', ()=> fitFrameToMedia(img.naturalWidth||16, img.naturalHeight||9));
+    img.addEventListener('error', ()=>{ const ph=document.createElement('div'); ph.style.cssText='min-width:280px;min-height:180px;display:grid;place-items:center;color:#bbb;background:#111;padding:24px;border:1px solid #222;border-radius:8px'; ph.textContent='изображение недоступно'; frame.innerHTML=''; frame.appendChild(ph); }, {once:true});
     frame.appendChild(img); currentMedia=img;
   } else {
     const v=document.createElement('video');
-    v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline','');
-    v.preload='metadata'; v.loop=true; v.controls=false; v.muted=true;
+    v.setAttribute('playsinline',''); v.playsInline=true;
+    v.preload='metadata'; v.loop=true; v.controls=false; v.muted=true; v.tabIndex=-1;
     if(item.poster) v.poster=item.poster;
     const s=document.createElement('source'); s.src=item.src; const mt=mimeByExt(item.src); if(mt) s.type=mt; v.appendChild(s);
-    v.addEventListener('error', ()=>{
-      frame.innerHTML = `<div class="tap-to-play"><div class="badge">Браузер не может воспроизвести это видео. <a href="${item.src}" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Открыть файл</a></div></div>`;
-    }, {once:true});
+
+    v.addEventListener('error', ()=>{ frame.innerHTML = `<div class="tap-to-play"><div class="badge">Браузер не может воспроизвести это видео. <a href="${item.src}" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Открыть файл</a></div></div>`; }, {once:true});
+    v.addEventListener('loadedmetadata', ()=> fitFrameToMedia(v.videoWidth||16, v.videoHeight||9));
+    v.addEventListener('canplay', ()=> fitFrameToMedia(v.videoWidth||16, v.videoHeight||9));
+
     frame.appendChild(v); currentMedia=v; setupPlayer(v);
-    v.play().then(()=>{ v.muted=false; return v.play(); }).catch(()=> showTapToPlay(v) );
+
+    v.play().catch(()=>{}).finally(()=>{
+      v.addEventListener('click', ()=> { v.paused ? v.play() : v.pause(); });
+      v.addEventListener('dblclick', ()=> { const el=frame; if(!document.fullscreenElement){ el.requestFullscreen?.() } else { document.exitFullscreen?.() } });
+      if(v.muted){ showTapToPlay(v); }
+    });
   }
 
   updateCaption(item);
   showLightbox();
+  fitCurrent();
 }
 
 function showTapToPlay(v){
@@ -329,7 +493,7 @@ function setupPlayer(v){
   const btnPlay=document.getElementById('play'); const btnMute=document.getElementById('mute'); const btnFS=document.getElementById('fs');
   seek=document.getElementById('seek'); vol=document.getElementById('vol'); timeLabel=document.getElementById('time');
 
-  const savedVol=parseFloat(localStorage.getItem('vol') ?? '1'); v.volume=savedVol;
+  const savedVol=parseFloat(localStorage.getItem('vol') ?? '1'); v.volume=isFinite(savedVol)?savedVol:1;
   btnPlay.textContent=v.paused?'▶︎':'❚❚'; updateMuteButton(v);
   timeLabel.textContent=`${fmt(0)} / ${fmt(v.duration||0)}`;
 
@@ -347,10 +511,10 @@ function setupPlayer(v){
   seek.oninput=()=>{ if(v.duration){ v.currentTime=(seek.value/1000)*v.duration } };
   vol.oninput=()=>{ const val=parseFloat(vol.value); localStorage.setItem('vol',val); v.volume=val; if(val===0) v.muted=true; if(val>0 && v.muted) v.muted=false; updateMuteButton(v); };
   btnFS.onclick=()=>{ const el=frame; if(!document.fullscreenElement){ el.requestFullscreen?.() } else { document.exitFullscreen?.() } };
-
-  document.addEventListener('visibilitychange',()=>{ if(document.hidden && currentMedia===v) v.pause(); });
 }
 function updateMuteButton(v){ document.getElementById('mute').textContent = v.muted ? '🔇' : '🔊'; }
+
+document.addEventListener('visibilitychange', ()=>{ const v = currentMedia instanceof HTMLVideoElement ? currentMedia : null; if(document.hidden && v){ v.pause(); } });
 
 function updateCaption(item){
   const useGroup = currentGroup.length>0 && item.type==='image';
@@ -361,20 +525,35 @@ function updateCaption(item){
   caption.innerHTML = `<span class="cap-main">${main}</span>${folder?` · <span>${folder}</span>`:''}<span class="cap-count">${index} / ${total}</span>`;
 }
 
-function showLightbox(){ lightbox.style.display='block'; requestAnimationFrame(()=>{backdrop.style.opacity=1;frame.style.opacity=1;frame.style.transform='scale(1)'}); document.body.style.overflow='hidden'; }
+function showLightbox(){
+  if(ob) ob.disconnect();
+  lightbox.style.display='block';
+  requestAnimationFrame(()=>{ backdrop.style.opacity=1; frame.style.opacity=1; frame.style.transform='scale(1)'; });
+  lockScroll();
+}
 function closeLightbox(){
-  backdrop.style.opacity=0;frame.style.opacity=0;frame.style.transform='scale(.98)';
+  backdrop.style.opacity=0; frame.style.opacity=0; frame.style.transform='scale(.98)';
   const v = currentMedia instanceof HTMLVideoElement ? currentMedia : null;
-  if(v){ try{ v.pause(); v.removeAttribute('src'); v.load(); }catch(_){} }
-  setTimeout(()=>{lightbox.style.display='none';frame.innerHTML='';player.classList.remove('visible');currentMedia=null},200);
-  document.body.style.overflow='';
+  if(v){ try{ v.pause(); v.removeAttribute('src'); v.load(); }catch(_){}}
+  setTimeout(()=>{ lightbox.style.display='none'; frame.innerHTML=''; player.classList.remove('visible'); currentMedia=null; unlockScroll(); if(ob && sentinel) ob.observe(sentinel); }, 300);
 }
 
-/* Листание: только по группе изображений */
+/* Листание изображений в группе */
 function openNeighbor(dir){
   if(currentGroup.length===0) return;
   groupPos = (groupPos + dir + currentGroup.length) % currentGroup.length;
-  renderCurrent(currentGroup[groupPos]);
+  const nextItem = currentGroup[groupPos]; renderCurrent(nextItem);
+}
+
+/* Клик по тёмной области */
+function handleDarkAreaClick(ev){
+  if(frame.contains(ev.target)) return;
+  if(currentGroup.length > 0){
+    const half = window.innerWidth / 2;
+    openNeighbor(ev.clientX < half ? -1 : 1);
+  } else {
+    closeLightbox();
+  }
 }
 
 /* Режимы */
@@ -391,14 +570,22 @@ function setMode(mode){
   }
   localStorage.setItem('mode',mode);
 }
-function setupHeadlineOverlay(){
-  const img = document.querySelector('.script-img');
-  const box = document.getElementById('headlineOverlay');
-  if(!img || !box) return; let t=null;
-  function show(msg){ box.textContent = msg || img.getAttribute('data-overlay') || img.alt || 'melanin'; box.classList.add('show'); clearTimeout(t); t = setTimeout(()=> box.classList.remove('show'), 5350); }
-  img.addEventListener('click', ()=> show());
-}
+function setupHeadlineOverlay(){ const img=document.querySelector('.script-img'); const box=document.getElementById('headlineOverlay'); if(!img||!box) return; let t=null; function show(msg){ box.textContent=msg||img.getAttribute('data-overlay')||img.alt||'melanin'; box.classList.add('show'); clearTimeout(t); t=setTimeout(()=> box.classList.remove('show'), 5350);} img.addEventListener('click', ()=> show()); }
 function setupSwipe(){ let sx=0, sy=0; frame.addEventListener('touchstart', (e)=>{const t=e.touches[0]; sx=t.clientX; sy=t.clientY}, {passive:true}); frame.addEventListener('touchend', (e)=>{const t=e.changedTouches[0]; const dx=t.clientX-sx, dy=t.clientY-sy; if(Math.abs(dx)>60 && Math.abs(dy)<80){ openNeighbor(dx<0?+1:-1); } }, {passive:true}); }
+
+/* === Observer для превью-видео === */
+function attachVideoToObserver(video){
+  if(!videoObserver){
+    videoObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(({isIntersecting, target})=>{
+        const v = target; if(!(v instanceof HTMLVideoElement)) return;
+        if(isIntersecting){ v.muted = true; v.playsInline = true; v.play().catch(()=>{}); }
+        else { v.pause(); }
+      });
+    }, {root:null, rootMargin:'200px 0px 400px 0px', threshold:0.01});
+  }
+  videoObserver.observe(video);
+}
 
 /* Инициализация */
 document.addEventListener('DOMContentLoaded',()=>{
@@ -408,9 +595,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   player=document.getElementById('player');seek=document.getElementById('seek');vol=document.getElementById('vol');timeLabel=document.getElementById('time');caption=document.getElementById('caption');
   modeSwitchEl=document.getElementById('modeSwitch');
 
+  frame.addEventListener('mousedown', (e)=>{ e.preventDefault(); }, {passive:false});
+
   btnClose.addEventListener('click',closeLightbox);
-  backdrop.addEventListener('click',closeLightbox);
-  dialog.addEventListener('click',(e)=>{ if(e.target === dialog) closeLightbox(); });
+  backdrop.addEventListener('click', handleDarkAreaClick);
+  dialog.addEventListener('click', handleDarkAreaClick);
 
   btnPrev.addEventListener('click',()=>openNeighbor(-1));
   btnNext.addEventListener('click',()=>openNeighbor(1));
@@ -420,12 +609,15 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(e.key==='Escape')closeLightbox();
     if(e.key==='ArrowLeft')openNeighbor(-1);
     if(e.key==='ArrowRight')openNeighbor(1);
-    if(e.key===' '){const vid=currentMedia instanceof HTMLVideoElement?currentMedia:null;if(vid){e.preventDefault();vid.paused?vid.play():vid.pause()}}
+    if(e.key===' '){
+      const vid=currentMedia instanceof HTMLVideoElement?currentMedia:null;
+      if(vid){e.preventDefault();vid.paused?vid.play():vid.pause()}
+    }
   });
 
   modeSwitchEl.addEventListener('click',(e)=>{const btn=e.target.closest('.mode-btn');if(!btn)return;setMode(btn.dataset.mode)});
 
-  const ob=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){appendBatch()}})},{rootMargin:'1200px 0px 1200px 0px'});
+  ob=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){appendBatch()}})},{rootMargin:'1200px 0px 1200px 0px'});
   appendBatch();appendBatch();
   ob.observe(sentinel);
 
@@ -444,10 +636,12 @@ document.addEventListener('DOMContentLoaded',()=>{
       const thumb = card.querySelector('.thumb');
       const media = card.querySelector('.media');
       if(!thumb || !media) return;
-      const w = media.naturalWidth || 16;
-      const h = media.naturalHeight || 9;
-      layoutCard(card, thumb, w, h);
+      const circle = card.classList.contains('circle');
+      const w = media instanceof HTMLVideoElement ? (media.videoWidth||16) : (media.naturalWidth||16);
+      const h = media instanceof HTMLVideoElement ? (media.videoHeight||9) : (media.naturalHeight||9);
+      layoutCard(card, thumb, w, h, circle);
     });
+    fitCurrent();
   }, {passive:true});
 
   setMode(localStorage.getItem('mode')||'15');
